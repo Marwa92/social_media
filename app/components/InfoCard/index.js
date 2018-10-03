@@ -6,9 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { makeSelectCurrentUser } from 'containers/ProfilePage/selectors';
+// import { connect } from 'react-redux';
+// import { createStructuredSelector } from 'reselect';
+// import { makeSelectCurrentUser } from 'containers/ProfilePage/selectors';
 // import styled from 'styled-components';
 
 /* eslint-disable react/prefer-stateless-function */
@@ -38,8 +38,10 @@ InfoCard.propTypes = {
   currentUserError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
-export default connect(
-  createStructuredSelector({
-    currentUser: makeSelectCurrentUser(),
-  }),
-)(InfoCard);
+// export default connect(
+//   createStructuredSelector({
+//     currentUser: makeSelectCurrentUser(),
+//   }),
+// )(InfoCard);
+
+export default InfoCard;
