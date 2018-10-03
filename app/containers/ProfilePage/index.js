@@ -17,10 +17,12 @@ import makeSelectProfilePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+import { loadCurrentUser } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ProfilePage extends React.Component {
   render() {
+    this.props.loadCurrentUser();
     return (
       <div>
         <FormattedMessage {...messages.header} />
@@ -29,9 +31,7 @@ export class ProfilePage extends React.Component {
   }
 }
 
-ProfilePage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
+ProfilePage.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({
   profilepage: makeSelectProfilePage(),
@@ -39,7 +39,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    loadCurrentUser: () => dispatch(loadCurrentUser()),
   };
 }
 
