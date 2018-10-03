@@ -29,4 +29,8 @@ const makeSelectCurrentUserError = () =>
   );
 
 export default makeSelectProfilePage;
-export { selectProfilePageDomain, makeSelectCurrentUser, makeSelectCurrentUserError };
+export {
+  selectProfilePageDomain,
+  makeSelectCurrentUser,
+  makeSelectCurrentUserError,
+};
