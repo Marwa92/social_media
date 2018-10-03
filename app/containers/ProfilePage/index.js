@@ -12,7 +12,10 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectProfilePage, { makeSelectCurrentUser } from './selectors';
+import makeSelectProfilePage, {
+  makeSelectCurrentUser,
+  makeSelectCurrentUserError,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import { loadCurrentUser } from './actions';
@@ -30,16 +33,22 @@ export class ProfilePage extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.props;
-    return currentUser ? (
-      <div>
-        <h1>Name: {currentUser.name}</h1>
-        <h1>Phone: {currentUser.phone}</h1>
-        <h1>Company Name: {currentUser.company.name}</h1>
-      </div>
-    ) : (
-      'loading'
-    );
+    const { currentUser, currentUserError } = this.props;
+    let Header = <h1>Loading...</h1>;
+    if(currentUser) {
+      Header = (
+        <div>
+          <h1>Name: {currentUser.name}</h1>
+          <h1>Phone: {currentUser.phone}</h1>
+          <h1>Company Name: {currentUser.company.name}</h1>
+        </div>
+      );
+    }
+    if(currentUserError) {
+      Header = <h1>Error loading user</h1>
+    }
+
+    return <div>{Header}</div>;
   }
 }
 
@@ -47,11 +56,13 @@ ProfilePage.propTypes = {
   loadCurrentUser: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
+  currentUserError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   profilepage: makeSelectProfilePage(),
   currentUser: makeSelectCurrentUser(),
+  currentUserError: makeSelectCurrentUserError(),
 });
 
 function mapDispatchToProps(dispatch) {
