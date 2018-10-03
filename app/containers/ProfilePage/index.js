@@ -7,22 +7,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectProfilePage from './selectors';
+import makeSelectProfilePage, { makeSelectCurrentUser } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 import { loadCurrentUser } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ProfilePage extends React.Component {
   componentDidMount() {
     // dispatch load user action
+    // const { currentUser } = this.props;
     const id =
       this.props.match && this.props.match.params
         ? this.props.match.params.id
@@ -31,10 +30,15 @@ export class ProfilePage extends React.Component {
   }
 
   render() {
-    return (
+    const { currentUser } = this.props;
+    return currentUser ? (
       <div>
-        <FormattedMessage {...messages.header} />
+        <h1>Name: {currentUser.name}</h1>
+        <h1>Phone: {currentUser.phone}</h1>
+        <h1>Company Name: {currentUser.company.name}</h1>
       </div>
+    ) : (
+      'loading'
     );
   }
 }
@@ -42,10 +46,12 @@ export class ProfilePage extends React.Component {
 ProfilePage.propTypes = {
   loadCurrentUser: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
+  currentUser: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   profilepage: makeSelectProfilePage(),
+  currentUser: makeSelectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -67,3 +73,11 @@ export default compose(
   withSaga,
   withConnect,
 )(ProfilePage);
+
+/*
+<h1>Name:{this.props.currentUser.name}</h1>
+<h1>
+  <span>Phone:{this.props.currentUser.phone} </span>
+  <span>Company Name:{this.props.currentUser.company.name}</span>
+</h1>
+*/

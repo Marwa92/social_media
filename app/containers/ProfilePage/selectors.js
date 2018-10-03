@@ -18,5 +18,10 @@ const selectProfilePageDomain = state => state.get('profilePage', initialState);
 const makeSelectProfilePage = () =>
   createSelector(selectProfilePageDomain, substate => substate.toJS());
 
+const makeSelectCurrentUser = () =>
+  createSelector(selectProfilePageDomain, profileState =>
+    profileState.get('currentUser'),
+  );
+
 export default makeSelectProfilePage;
-export { selectProfilePageDomain };
+export { selectProfilePageDomain, makeSelectCurrentUser };
