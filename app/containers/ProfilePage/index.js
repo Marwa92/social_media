@@ -31,7 +31,9 @@ export class ProfilePage extends React.Component {
   }
 }
 
-ProfilePage.propTypes = {};
+ProfilePage.propTypes = {
+  loadCurrentUser: PropTypes.func,
+};
 
 const mapStateToProps = createStructuredSelector({
   profilepage: makeSelectProfilePage(),
