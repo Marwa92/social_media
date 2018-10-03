@@ -21,19 +21,19 @@ function profilePageReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_CURRENT_USER:
       return state
-        .set('loading', true)
-        .set('error', false)
+        .set('currentUserLoading', true)
+        .set('currentUserError', false)
         .set('currentUser', null);
     case CURRENT_USER_SUCCESS:
       return state
-        .set('currentUser', action.user)
-        .set('error', false)
-        .set('loading', false);
+        .set('currentUser', action.currentUser)
+        .set('currentUserError', false)
+        .set('currentUserLoading', false);
     case CURRENT_USER_ERROR:
       return state
         .set('currentUser', null)
-        .set('error', action.error)
-        .set('loading', false);
+        .set('currentUserError', action.error)
+        .set('currentUserLoading', false);
     default:
       return state;
   }

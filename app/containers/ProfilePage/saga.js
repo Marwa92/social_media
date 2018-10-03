@@ -1,17 +1,16 @@
-import { take, call, put, select, takeLatest } from 'redux-saga/effects';
-import { LOAD_CURRENT_USER } from './constants';
-
+import { call, put, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
+import { LOAD_CURRENT_USER } from './constants';
+import { currentUserLoaded, currentUserLoadingError } from './actions';
 
-export function* getCurrentUser() {
-  console.log('in request');
-  const requestURL = `https://jsonplaceholder.typicode.com/users/1`;
+export function* getCurrentUser(action) {
+  const requestURL = `https://jsonplaceholder.typicode.com/users/${action.id}`;
 
   try {
     const currentUser = yield call(request, requestURL);
-    console.log('currentuser: ', currentUser);
+    yield put(currentUserLoaded(currentUser));
   } catch (e) {
-    console.log(e);
+    yield put(currentUserLoadingError(e));
   }
 }
 

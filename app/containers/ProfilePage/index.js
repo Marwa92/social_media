@@ -21,8 +21,16 @@ import { loadCurrentUser } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ProfilePage extends React.Component {
+  componentDidMount() {
+    // dispatch load user action
+    const id =
+      this.props.match && this.props.match.params
+        ? this.props.match.params.id
+        : null;
+    this.props.loadCurrentUser(id);
+  }
+
   render() {
-    this.props.loadCurrentUser();
     return (
       <div>
         <FormattedMessage {...messages.header} />
@@ -32,7 +40,8 @@ export class ProfilePage extends React.Component {
 }
 
 ProfilePage.propTypes = {
-  loadCurrentUser: PropTypes.func,
+  loadCurrentUser: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -41,7 +50,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadCurrentUser: () => dispatch(loadCurrentUser()),
+    loadCurrentUser: id => dispatch(loadCurrentUser(id)),
   };
 }
 
