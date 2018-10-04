@@ -46,7 +46,6 @@ export class ProfilePage extends React.Component {
       currentUserError,
     };
     let Content = <h1>Loading...</h1>;
-    console.log('currentUserPosts:', currentUserPosts);
     if (currentUserPosts && currentUser) {
       Content = currentUserPosts.map(post => (
         <li key={post.id}>

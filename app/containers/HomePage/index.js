@@ -10,16 +10,74 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+import makeSelectHomePage, {
+  makeSelectUsers,
+  makeSelectUsersError,
+} from './selectors';
+import reducer from './reducer';
+import saga from './saga';
+import { loadUsers } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
-export default class HomePage extends React.PureComponent {
+export class HomePage extends React.PureComponent {
+  componentDidMount() {
+    // dispatch load user action
+    // const { currentUser } = this.props;
+    this.props.loadUsers();
+  }
+
   render() {
-    return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
-    );
+    const { users, usersError } = this.props;
+    let Content = <h1>Loading...</h1>;
+    if (users) {
+      Content = users.map(user => (
+        <li key={user.id}>
+          <b> {user.name}:</b>
+        </li>
+      ));
+    }
+    if (usersError) {
+      Content = <h1>Error loading user</h1>;
+    }
+    return <div>{Content}</div>;
   }
 }
+
+HomePage.propTypes = {
+  loadUsers: PropTypes.func.isRequired,
+  users: PropTypes.array,
+  usersError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+};
+
+const mapStateToProps = createStructuredSelector({
+  hompage: makeSelectHomePage(),
+  users: makeSelectUsers(),
+  usersError: makeSelectUsersError(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    loadUsers: () => dispatch(loadUsers()),
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+const withReducer = injectReducer({ key: 'homePage', reducer });
+const withSaga = injectSaga({ key: 'homePage', saga });
+
+export default compose(
+  withReducer,
+  withSaga,
+  withConnect,
+)(HomePage);
