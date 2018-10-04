@@ -16,10 +16,11 @@ import InfoCard from 'components/InfoCard';
 import makeSelectProfilePage, {
   makeSelectCurrentUser,
   makeSelectCurrentUserError,
+  makeSelectCurrentUserPosts,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { loadCurrentUser, loadUserPosts } from './actions';
+import { loadCurrentUser } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ProfilePage extends React.Component {
@@ -34,12 +35,35 @@ export class ProfilePage extends React.Component {
   }
 
   render() {
-    const { currentUser, currentUserError } = this.props;
+    const {
+      currentUser,
+      currentUserError,
+      currentUserPosts,
+      currentUserPostsError,
+    } = this.props;
     const InfoCardProps = {
       currentUser,
       currentUserError,
     };
-    return <InfoCard {...InfoCardProps} />;
+    let Content = <h1>Loading...</h1>;
+    console.log('currentUserPosts:', currentUserPosts);
+    if (currentUserPosts && currentUser) {
+      Content = currentUserPosts.map(post => (
+        <li key={post.id}>
+          <b> {currentUser.name}:</b>
+          {post.body}
+        </li>
+      ));
+    }
+    if (currentUserPostsError) {
+      Content = <h1>Error loading user</h1>;
+    }
+    return (
+      <div>
+        <InfoCard {...InfoCardProps} />
+        {Content}
+      </div>
+    );
   }
 }
 
@@ -48,21 +72,23 @@ ProfilePage.propTypes = {
   match: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
   currentUserError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  loadUserPosts: PropTypes.func.isRequired,
-  userPosts: PropTypes.array,
-  userPostsError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  currentUserPosts: PropTypes.array,
+  currentUserPostsError: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
 };
 
 const mapStateToProps = createStructuredSelector({
   profilepage: makeSelectProfilePage(),
   currentUser: makeSelectCurrentUser(),
   currentUserError: makeSelectCurrentUserError(),
+  currentUserPosts: makeSelectCurrentUserPosts(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     loadCurrentUser: id => dispatch(loadCurrentUser(id)),
-    loadUserPosts: userId => dispatch(loadUserPosts(userId)),
   };
 }
 

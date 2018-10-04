@@ -48,7 +48,7 @@ export function currentUserLoaded(currentUser) {
  */
 export function currentUserLoadingError(error) {
   return {
-    type: CURRENT_USER_ERROCURRENT_USER_POSTS_ERRORR,
+    type: CURRENT_USER_ERROR,
     error,
   };
 }

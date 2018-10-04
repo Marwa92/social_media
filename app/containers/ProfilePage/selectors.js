@@ -23,6 +23,11 @@ const makeSelectCurrentUser = () =>
     profileState.get('currentUser'),
   );
 
+const makeSelectCurrentUserPosts = () =>
+  createSelector(selectProfilePageDomain, profileState =>
+    profileState.get('currentUserPosts'),
+  );
+
 const makeSelectCurrentUserError = () =>
   createSelector(selectProfilePageDomain, profileState =>
     profileState.get('currentUserError'),
@@ -33,4 +38,5 @@ export {
   selectProfilePageDomain,
   makeSelectCurrentUser,
   makeSelectCurrentUserError,
+  makeSelectCurrentUserPosts,
 };
