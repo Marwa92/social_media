@@ -19,7 +19,7 @@ import makeSelectProfilePage, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { loadCurrentUser } from './actions';
+import { loadCurrentUser, loadUserPosts } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class ProfilePage extends React.Component {
@@ -48,6 +48,9 @@ ProfilePage.propTypes = {
   match: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
   currentUserError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  loadUserPosts: PropTypes.func.isRequired,
+  userPosts: PropTypes.array,
+  userPostsError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -59,6 +62,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     loadCurrentUser: id => dispatch(loadCurrentUser(id)),
+    loadUserPosts: userId => dispatch(loadUserPosts(userId)),
   };
 }
 
@@ -75,11 +79,3 @@ export default compose(
   withSaga,
   withConnect,
 )(ProfilePage);
-
-/*
-<h1>Name:{this.props.currentUser.name}</h1>
-<h1>
-  <span>Phone:{this.props.currentUser.phone} </span>
-  <span>Company Name:{this.props.currentUser.company.name}</span>
-</h1>
-*/

@@ -8,6 +8,9 @@ import {
   LOAD_CURRENT_USER,
   CURRENT_USER_SUCCESS,
   CURRENT_USER_ERROR,
+  LOAD_CURRENT_USER_POSTS,
+  CURRENT_USER_POSTS_SUCCESS,
+  CURRENT_USER_POSTS_ERROR,
 } from './constants';
 
 /**
@@ -45,7 +48,46 @@ export function currentUserLoaded(currentUser) {
  */
 export function currentUserLoadingError(error) {
   return {
-    type: CURRENT_USER_ERROR,
+    type: CURRENT_USER_ERROCURRENT_USER_POSTS_ERRORR,
+    error,
+  };
+}
+
+/**
+ * @return {object} An action object with a type of LOAD_REPOS
+ */
+
+export function loadCurrentUserPosts(userId) {
+  return {
+    type: LOAD_CURRENT_USER_POSTS,
+    userId,
+  };
+}
+
+/**
+ * Dispatched when the repositories are loaded by the request saga
+ *
+ * @param  {array} userPosts
+ *
+ * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
+ */
+export function currentUserPostsLoaded(userPosts) {
+  return {
+    type: CURRENT_USER_POSTS_SUCCESS,
+    userPosts,
+  };
+}
+
+/*
+* Dispatched when loading the repositories fails
+*
+* @param  {object} error The error
+*
+* @return {object}       An action object with a type of LOAD_REPOS_ERROR passing the error
+*/
+export function currentUserPostsLoadingError(error) {
+  return {
+    type: CURRENT_USER_POSTS_ERROR,
     error,
   };
 }
