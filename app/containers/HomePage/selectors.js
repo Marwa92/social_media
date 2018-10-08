@@ -22,9 +22,25 @@ const makeSelectUsers = () =>
   createSelector(selectHomePageDomain, homeState => homeState.get('users'));
 
 const makeSelectUsersError = () =>
-  createSelector(selectHomePageDomain, profileState =>
-    profileState.get('usersError'),
+  createSelector(selectHomePageDomain, homeState =>
+    homeState.get('usersError'),
+  );
+
+const makeSelectUsersPosts = () =>
+  createSelector(selectHomePageDomain, homeState =>
+    homeState.get('usersPosts'),
+  );
+
+const makeSelectUsersPostsError = () =>
+  createSelector(selectHomePageDomain, homeState =>
+    homeState.get('usersPostsError'),
   );
 
 export default makeSelectHomePage;
-export { selectHomePageDomain, makeSelectUsers, makeSelectUsersError };
+export {
+  selectHomePageDomain,
+  makeSelectUsers,
+  makeSelectUsersError,
+  makeSelectUsersPosts,
+  makeSelectUsersPostsError,
+};

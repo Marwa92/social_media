@@ -20,6 +20,8 @@ import injectReducer from 'utils/injectReducer';
 import makeSelectHomePage, {
   makeSelectUsers,
   makeSelectUsersError,
+  makeSelectUsersPosts,
+  makeSelectUsersPostsError,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -34,13 +36,34 @@ export class HomePage extends React.PureComponent {
   }
 
   render() {
-    const { users, usersError } = this.props;
+    const { users, usersError, usersPosts, usersPostsError } = this.props;
+    const id = users ? users.map(user => user.id) : null;
+    const userId = usersPosts ? usersPosts.map(post => post.userId) : null;
+    console.log('users', id);
+    console.log('body', userId);
+
     let Content = <h1>Loading...</h1>;
-    if (users) {
+    let Posts = <h1>Loading...</h1>;
+    if (usersPosts) {
+      Posts = usersPosts.map(post => {
+        return id === post.userId ? (
+          <span key={post.id}>{post.body}</span>
+        ) : (
+          <div>test</div>
+        );
+      }
+      )}
+
+    if (usersPostsError) {
+      Posts = <h1>Error loading posts</h1>;
+    }
+
+    if (users && usersPosts) {
       Content = users.map(user => (
-        <li key={user.id}>
-          <b> {user.name}:</b>
-        </li>
+        <ul key={user.id}>
+          <b>{user.name}:</b>
+          <p> {Posts} </p>
+        </ul>
       ));
     }
     if (usersError) {
@@ -54,12 +77,16 @@ HomePage.propTypes = {
   loadUsers: PropTypes.func.isRequired,
   users: PropTypes.array,
   usersError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  usersPosts: PropTypes.array,
+  usersPostsError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   hompage: makeSelectHomePage(),
   users: makeSelectUsers(),
   usersError: makeSelectUsersError(),
+  usersPosts: makeSelectUsersPosts(),
+  usersPostsError: makeSelectUsersPostsError(),
 });
 
 function mapDispatchToProps(dispatch) {

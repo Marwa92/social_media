@@ -22,7 +22,7 @@ export const initialState = fromJS({
   usersPosts: null,
 });
 
-function profilePageReducer(state = initialState, action) {
+function homePageReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_USERS:
       return state
@@ -41,7 +41,7 @@ function profilePageReducer(state = initialState, action) {
       return state
         .set('users', null)
         .set('usersError', action.error)
-        .set('currentUserLoading', false);
+        .set('usersLoading', false);
     case USERS_POSTS_SUCCESS:
       return state
         .set('usersPostsLoading', false)
@@ -50,11 +50,11 @@ function profilePageReducer(state = initialState, action) {
     case USERS_POSTS_ERROR:
       return state
         .set('usersPostsLoading', false)
-        .set('usersPostsError', true)
+        .set('usersPostsError', action.error)
         .set('usersPosts', null);
     default:
       return state;
   }
 }
 
-export default profilePageReducer;
+export default homePageReducer;
