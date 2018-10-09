@@ -30,53 +30,32 @@ import { loadUsers } from './actions';
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
   componentDidMount() {
-    // dispatch load user action
-    // const { currentUser } = this.props;
     this.props.loadUsers();
   }
 
   render() {
-    const { users, usersError, usersPosts, usersPostsError } = this.props;
-    const id = users ? users.map(user => user.id) : null;
-    const userId = usersPosts ? usersPosts.map(post => post.userId) : null;
-    console.log('users', id);
-    console.log('body', userId);
+    const { usersPosts, usersPostsError } = this.props;
 
-    let Content = <h1>Loading...</h1>;
     let Posts = <h1>Loading...</h1>;
-    if (usersPosts) {
-      Posts = usersPosts.map(post => {
-        return id === post.userId ? (
-          <span key={post.id}>{post.body}</span>
-        ) : (
-          <div>test</div>
-        );
-      }
-      )}
 
     if (usersPostsError) {
       Posts = <h1>Error loading posts</h1>;
     }
 
-    if (users && usersPosts) {
-      Content = users.map(user => (
-        <ul key={user.id}>
-          <b>{user.name}:</b>
-          <p> {Posts} </p>
-        </ul>
+    if (usersPosts) {
+      Posts = usersPosts.map(post => (
+        <li key={post.id}>
+          <b key={post.user.id}>{post.user.name}:</b>
+          <span>{post.body}</span>
+        </li>
       ));
     }
-    if (usersError) {
-      Content = <h1>Error loading user</h1>;
-    }
-    return <div>{Content}</div>;
+    return <div>{Posts}</div>;
   }
 }
 
 HomePage.propTypes = {
   loadUsers: PropTypes.func.isRequired,
-  users: PropTypes.array,
-  usersError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   usersPosts: PropTypes.array,
   usersPostsError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
